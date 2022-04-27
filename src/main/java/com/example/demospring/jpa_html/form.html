@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+</head>
+<body>
+<div class="w3-card-4">
+  <div class="w3-container w3-brown">
+    <h2>Employees Form</h2>
+  </div>
+  <form class="w3-container" name = "employee-form">
+    <p>
+      <label class="w3-text-brown"><b>Name</b></label>
+      <input class="w3-input w3-border w3-sand" name="name" type="text"></p>
+    <p>
+      <label class="w3-text-brown"><b>Wage</b></label>
+      <input class="w3-input w3-border w3-sand" name="wage" type="number"></p>
+    <p>
+      <input class="w3-btn w3-brown" type="submit" value="Submit" name = "submit">
+      <input class="w3-btn w3-brown" type="submit" value="Reset">
+    </p>
+  </form>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var action = 1
+    var url = `http://localhost:8080/api/v1/employees`;
+    var method = 'POST';
+
+    const urlParmas = new URLSearchParams(window.location.search);
+    const id = urlParmas.get('id');
+    if (id !== undefined && id !== null && id.length > 0){
+      action = 2;
+    }
+
+    var btnSubmit =  document.forms['employee-form']['submit'];
+
+    var inputName =  document.forms['employee-form']['name'];
+    var inputWage=  document.forms['employee-form']['wage'];
+
+    if (action === 2){
+      url = `http://localhost:8080/api/v1/employees/${id}`;
+      method = 'PUT';
+      loadArticleDetail(id);
+    }
+
+    btnSubmit.onclick = function (e) {
+      e.preventDefault();
+      var objectToSend = {
+        'name' : inputName.value,
+        'wage' : inputWage.value,
+      }
+      var data = JSON.stringify(objectToSend);
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200){
+          window.location.href = 'index.html?name=';
+        }
+      }
+      xhr.open(method ,url, false);
+      xhr.setRequestHeader("Content-Type", "application/json;charset = UTF-8");
+      xhr.send(data);
+
+    }
+  });
+
+  function loadArticleDetail(id) {
+    var getEmployeeDetailUrl = `http://localhost:8080/api/v1/employees/${id}`;
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4){
+        if (xhr.status === 200){
+          var employeeDetail = JSON.parse(xhr.responseText);
+          document.forms['employee-form']['name'].value = employeeDetail.name;
+          document.forms['employee-form']['wage'].value = employeeDetail.wage;
+        } else {
+          alert('Can\'t load');
+        }
+      }
+    }
+    xhr.open('GET' ,getEmployeeDetailUrl, false);
+    xhr.send();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="w3-row w3-margin">
+        <h2>List Employee</h2>
+        <a href="form.html"><button class="w3-button w3-circle w3-black">+</button></a>
+    </div>
+    <form action="index.html" method="get">
+        Name : <input type="text" name="name">
+        <input type="submit" value="Search">
+    </form>
+    <div class="w3-row w3-margin">
+        <table id="article-table">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Wage</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParmas = new URLSearchParams(window.location.search);
+        const name = urlParmas.get('name');
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () { 
+            if (xhr.readyState == 4 && xhr.status == 200){
+                console.log(xhr.responseText);
+                var data = JSON.parse(xhr.responseText);
+                console.log(data[0].name);
+                var tableTag = document.querySelector('#article-table');
+                for (let i = 0; i < data.length; i ++){
+                    const  element = data[i];
+                    tableTag.innerHTML += `<tr>
+                                            <td>${element.id}</td>
+                                            <td>${element.name}</td>
+                                            <td>${element.wage}</td>
+                                            <td class="w3-margin">
+                                                <a href="form.html?id=${element.id}"> <i class="fa fa-edit"></i></a>
+                                                <a href="detail.html?id=${element.id}"> <i class="fa fa-exclamation-circle"></i></a>
+                                                <i class="fa fa-trash" onclick="deleteProduct(${element.id})"></i>
+                                            </td>
+                                        </tr>`;
+                }
+            }
+        }
+        xhr.open('GET',`http://localhost:8080/api/v1/employees?name=${name}`, false);
+        xhr.send(); 
+    });
+
+    function deleteProduct(id) {
+        if (id === undefined || id === null){
+            return;
+        }
+        if (confirm('Are you sure ?')){
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200){
+                    alert('Success');
+                    window.location.href = 'index.html?name=';
+                }
+            };
+            xhr.open('DELETE','http://localhost:8080/api/v1/employees/' + id, false);
+            xhr.send();
+        }
+    }
+</script>
+</body>
+</html>

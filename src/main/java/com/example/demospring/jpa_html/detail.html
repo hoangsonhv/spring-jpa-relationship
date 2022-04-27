@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+<div class="w3-container">
+    <div class="w3-row w3-margin">
+        <a href="index.html?name="><< Black</a>
+        <h2>Detail employee</h2>
+    </div>
+    <div class="w3-row w3-margin">
+        <table id="employee-table">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Wage</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParmas = new URLSearchParams(window.location.search);
+        const id = urlParmas.get('id');
+        var getEmployeeDetailUrl = `http://localhost:8080/api/v1/employees/${id}`;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var element = JSON.parse(xhr.responseText);
+                    var tableTag = document.querySelector('#employee-table');
+                    tableTag.innerHTML += `<tr>
+                                             <td>${element.id}</td>
+                                            <td>${element.name}</td>
+                                            <td>${element.wage}</td>
+                                        <td class="w3-margin">
+                                                <a href="form.html?id=${element.id}"> <i class="fa fa-edit"></i></a>
+                                                <i class="fa fa-trash" onclick="deleteProduct(${element.id})"></i>
+                                        </td>
+                                    </tr>`;
+                }else {
+                    alert('Can\'t load');
+                }
+            }
+        }
+        xhr.open('GET',getEmployeeDetailUrl, false);
+        xhr.send();
+    });
+</script>
+</body>
+</html>
