@@ -1,4 +1,4 @@
-package com.example.demospring.employee.entity;
+package com.example.demospring.practical.employee.entity;
 
 import lombok.*;
 

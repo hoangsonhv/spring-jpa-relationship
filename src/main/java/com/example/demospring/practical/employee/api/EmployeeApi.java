@@ -1,8 +1,10 @@
-package com.example.demospring.employee.api;
+package com.example.demospring.practical.employee.api;
 
-import com.example.demospring.employee.repository.EmployeeRepository;
-import com.example.demospring.employee.service.EmployeeService;
-import com.example.demospring.employee.entity.Employee;
+import com.example.demospring.practical.employee.repository.EmployeeRepository;
+import com.example.demospring.practical.employee.service.EmployeeService;
+import com.example.demospring.practical.employee.entity.Employee;
+import com.example.demospring.practical.employee.entity.Employee;
+import com.example.demospring.practical.employee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

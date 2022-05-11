@@ -1,6 +1,7 @@
-package com.example.demospring.employee.repository;
+package com.example.demospring.practical.employee.repository;
 
-import com.example.demospring.employee.entity.Employee;
+import com.example.demospring.practical.employee.entity.Employee;
+import com.example.demospring.practical.employee.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
